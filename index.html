@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>COVID-19 Coronavirus Tracker</title>
+  <link rel="stylesheet" href="./style.css">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-72006251-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-72006251-2');
+</script>
+
+<style>
+	/*	
+	Side Navigation Menu V2, RWD
+	===================
+	License:
+	https://goo.gl/EaUPrt
+	===================
+	Author: @PableraShow
+
+ */
+
+@charset "UTF-8";
+@import "https://fonts.googleapis.com/css?family=Montserrat:300,400,700";
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  line-height: 1.42em;
+  color:#A7A1AE;
+  background-color:#1F2739;
+  font-size: 20px;
+}
+
+h1 {
+  font-size:3em; 
+  font-weight: 300;
+  line-height:1em;
+  text-align: center;
+  color: #4DC3FA;
+}
+
+h2 {
+  font-size:1em; 
+  font-weight: 300;
+  text-align: center;
+  display: block;
+  line-height:1em;
+  padding-bottom: 2em;
+  color: #FB667A;
+  word-wrap: break-word;
+}
+
+h2 a {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #FB667A;
+  text-decoration: none;
+}
+
+.blue { color: #185875; }
+.yellow { color: #FFF842; }
+
+.container th h1 {
+	  font-weight: bold;
+	  font-size: 20px;
+  text-align: left;
+  color: #1eb2a6;
+}
+
+.container td {
+	  font-weight: bold;
+	  font-size: 1em;
+  -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+	   -moz-box-shadow: 0 2px 2px -2px #0E1119;
+	        box-shadow: 0 2px 2px -2px #0E1119;
+}
+
+.container {
+	  text-align: left;
+	  overflow: hidden;
+	  width: 55%;
+	  margin: -30px auto;
+  display: table;
+  padding: 0 0 4em 0;
+}
+
+.container td, .container th {
+	  padding-bottom: 2%;
+	  padding-top: 2%;
+  padding-left:2%;  
+}
+
+/* Background-color of the odd rows */
+.container tr:nth-child(odd) {
+	  background-color: #323C50;
+}
+
+/* Background-color of the even rows */
+.container tr:nth-child(even) {
+	  background-color: #2C3446;
+}
+
+.container th {
+	  background-color: #1F2739;
+}
+
+.container td:first-child { color: #FB667A; }
+
+.container tr:hover {
+   background-color: #464A52;
+-webkit-box-shadow: 0 6px 6px -6px #0E1119;
+	   -moz-box-shadow: 0 6px 6px -6px #0E1119;
+	        box-shadow: 0 6px 6px -6px #0E1119;
+}
+
+.container td:hover {
+  background-color: #FFF842;
+  color: #403E10;
+  font-weight: bold;
+  
+  box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
+  transform: translate3d(6px, -6px, 0);
+  
+  transition-delay: 0s;
+	  transition-duration: 0.4s;
+	  transition-property: all;
+  transition-timing-function: line;
+}
+
+@media (max-width: 800px) {
+.container td:nth-child(4),
+.container th:nth-child(4) { display: none; }
+}
+</style>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<h1><span class="yellow">COVID-19 Coronavirus Tracker</span></h1>
+<h2>Powered by <a href="https://covidtracking.com/about-tracker/" target="_blank">The COVID Tracking Project API</a> that collects information from 50 US states, the District of Columbia, and 5 other U.S. territories.</h2> 
+<table class="container" id="state_data">	
+		<tr>
+			<th><h1>States</h1></th>
+			<th><h1>Positive</h1></th>
+			<th><h1>Negative</h1></th>
+			<th><h1>Pending</h1></th>
+			<th><h1>Death</h1></th>
+			<th><h1>Total</h1></th>
+			<th><h1>Last Update - ET</h1></th>
+		</tr>	
+</table>
+
+<h2><strong>US Totals</strong> </h2>
+<table class="container" id="us_data">	
+  <tr>
+    <th><h1>Total</h1></th>
+    <th><h1>Positive</h1></th>
+    <th><h1>Negative</h1></th>
+    <th><h1>Pos + Neg</h1></th>
+    <th><h1>Pending</h1></th>
+    <th><h1>Death</h1></th>
+  </tr>	
+</table>
+<!-- partial -->
+<h2>© 2020 - Developed by <a href="https://jeanbk.github.io/" target="_blank">Jean Konan</a></h2> 
+ <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script  src="./script.js"></script>
+</body>
+<script>
+	$(document).ready(function(){
+    $.getJSON("https://covidtracking.com/api/states", function(data){
+
+        var state_data = '';
+        $.each(data, function(key, value){
+
+          if (value.state === 'AK') value.state = 'Alaska';
+          if (value.state === 'AL') value.state = 'Alabama';
+          if (value.state === 'AR') value.state = 'Arkansas';
+          if (value.state === 'AS') value.state = 'American Samoa';
+          if (value.state === 'AZ') value.state = 'Arizona';
+          if (value.state === 'CA') value.state = 'California';
+          if (value.state === 'CO') value.state = 'Colorado';
+          if (value.state === 'CT') value.state = 'Connecticut';
+          if (value.state === 'DC') value.state = 'District Of Columbia';
+          if (value.state === 'DE') value.state = 'Delaware';
+          if (value.state === 'FL') value.state = 'Florida';
+          if (value.state === 'GA') value.state = 'Georgia';
+          if (value.state === 'GU') value.state = 'Guam';
+          if (value.state === 'HI') value.state = 'Hawaii';
+          if (value.state === 'IA') value.state = 'Iowa';
+          if (value.state === 'ID') value.state = 'Idaho';
+          if (value.state === 'IL') value.state = 'Illinois';
+          if (value.state === 'IN') value.state = 'Indiana';
+          if (value.state === 'KS') value.state = 'Kansas';
+          if (value.state === 'KY') value.state = 'Kentucky';
+          if (value.state === 'LA') value.state = 'Louisiana';
+          if (value.state === 'MA') value.state = 'Massachusetts';
+          if (value.state === 'MD') value.state = 'Maryland';
+          if (value.state === 'ME') value.state = 'Maine';
+          if (value.state === 'MI') value.state = 'Michigan';
+          if (value.state === 'MN') value.state = 'Minnesota';
+          if (value.state === 'MO') value.state = 'Missouri';
+          if (value.state === 'MP') value.state = 'Northern Mariana Islands';
+          if (value.state === 'MS') value.state = 'Mississipi';
+          if (value.state === 'MT') value.state = 'Montana';
+          if (value.state === 'NC') value.state = 'North Carolina';
+          if (value.state === 'ND') value.state = 'North Dakota';
+          if (value.state === 'NE') value.state = 'Nebraska';
+          if (value.state === 'NH') value.state = 'New Hampshire';
+          if (value.state === 'NJ') value.state = 'New Jersey';
+          if (value.state === 'NM') value.state = 'New Mexico';
+          if (value.state === 'NV') value.state = 'Nevada';
+          if (value.state === 'NY') value.state = 'New York';
+          if (value.state === 'OH') value.state = 'Ohio';
+          if (value.state === 'OK') value.state = 'Oklahoma';
+          if (value.state === 'OR') value.state = 'Oregon';
+          if (value.state === 'PA') value.state = 'Pennsylvania';
+          if (value.state === 'PR') value.state = 'Puerto Rico';
+          if (value.state === 'RI') value.state = 'Rhode Island';
+          if (value.state === 'SC') value.state = 'South Carolina';
+          if (value.state === 'SD') value.state = 'South Dakota';
+          if (value.state === 'TN') value.state = 'Tennessee';
+          if (value.state === 'TX') value.state = 'Texas';
+          if (value.state === 'UT') value.state = 'Utah';
+          if (value.state === 'VA') value.state = 'Virginia';
+          if (value.state === 'VI') value.state = 'US Virgin Islands';
+          if (value.state === 'VT') value.state = 'Vermont';
+          if (value.state === 'WA') value.state = 'Washington';
+          if (value.state === 'WI') value.state = 'Wisconsin';
+          if (value.state === 'WV') value.state = 'West Virginia';
+          if (value.state === 'WY') value.state = 'Wyoming';
+
+
+          if (value.negative=== null) value.negative = 0;
+          if (value.pending=== null) value.pending = 0;
+          if (value.death=== null) value.death = 0;
+
+            state_data+= '<tr>';
+            state_data+= '<td>'+value.state+'</td>';
+            state_data+= '<td>'+value.positive+'</td>';
+            state_data+= '<td>'+value.negative+'</td>';
+            state_data+= '<td>'+value.pending+'</td>';
+            state_data+= '<td>'+value.death+'</td>';
+            state_data+= '<td>'+value.total+'</td>';
+            state_data+= '<td>'+value.lastUpdateEt+'</td>';
+            state_data+= '<tr>';
+        });
+        $('#state_data').append(state_data);
+
+    });
+
+    $.getJSON("https://covidtracking.com/api/us", function(data){
+
+        var us_data = '';
+        $.each(data, function(key, value){
+
+          us_data+= '<tr>';
+          us_data+= '<td>'+value.total+'</td>';
+          us_data+= '<td>'+value.positive+'</td>';
+          us_data+= '<td>'+value.negative+'</td>';
+          us_data+= '<td>'+value.posNeg+'</td>';
+          us_data+= '<td>'+value.pending+'</td>';
+          us_data+= '<td>'+value.death+'</td>';
+          us_data+= '<tr>';
+        });
+        $('#us_data').append(us_data);
+
+    });
+
+  });
+</script>
+
+</html>
