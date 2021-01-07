@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -173,7 +174,7 @@ h2 a {
 </body>
 <script>
 	$(document).ready(function(){
-    $.getJSON("https://covidtracking.com/api/states", function(data){
+    $.getJSON("https://api.covidtracking.com/v1/states/current.json", function(data){
 
         var state_data = '';
         $.each(data, function(key, value){
@@ -254,7 +255,7 @@ h2 a {
 
     });
 
-    $.getJSON("https://covidtracking.com/api/us", function(data){
+    $.getJSON("https://api.covidtracking.com/v1/us/current.json", function(data){
 
         var us_data = '';
         $.each(data, function(key, value){
